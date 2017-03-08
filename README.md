@@ -1,4 +1,4 @@
-# Penjualan Online Alat-alat Adventure
+#Penjualan Online Alat-alatAdventure.com
 
  Khafid Ashari (5150311086)
  Stefana Clayresa (5150311058)
