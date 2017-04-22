@@ -1,109 +1,72 @@
+<center>
+	<h2>KONTAK</h2>
+<div style="text-align:right">
+<table width="100%" cellpadding="5" cellspacing="0"  border="1" align="center" class="tabel">
+  <tr style="background-color:009900; color:#FFF">
+    <th width="20">No. Urut</th><th>Tanggal</th>
+    <th>Nama Kontak</th><th>Email</th><th>Pesan Kontak</th>
+    <th>Tanggapan Admin</th>
+   
+    <th width="50">Aksi</th>
+  </tr>
 <?php
-include "daftarkontak.php";
-if(!isset($_POST['button']))
-{
-	?>
-       <script language="javascript">
-	function cek()
-	{
-		vn=document.getElementById("nama").value
-		ve=document.getElementById("email").value
-		va=document.getElementById("pesan").value
-		vkode=document.getElementById("kode").value
-		vkodecap=document.getElementById("kodecap").value
-		pj=vn.length;
-		//alert(pj)
-		
-		ada="tidak";
-		for(i=0;i<pj;i++)
-		{
-			str=parseFloat(vn.charAt(i));
-			if(!isNaN(str))
-			{
-				ada="ya"
-			}
-		}
-		if(vn=="")
-		{
-			alert("Nama harus diisi");
-			document.getElementById("nama").focus()
-			return false
-		}
-		else if(vn=="" || ada=="ya")
-		{
-			alert("nama wajib diisi dan hanya boleh diisi dengan huruf");
-			document.getElementById("nama").focus()
-			return false
-		}
-		else if(va=="")
-		{
-			alert("Pesan harus diisi");
-			document.getElementById("pesan").focus()
-			return false
-		}
-		else if(ve=="" || ve.indexOf("@")==-1 || ve.indexOf(".")==-1)
-		{
-			alert("Email kosong atau email tidak valid");
-			document.getElementById("email").focus()
-			return false
-		}
-		else if(vkode=="")
-		{
-			alert("Kode keamanan wajib diisi");
-			document.getElementById("kode").focus()
-			return false
-		}
-		else if(vkode!=vkodecap)
-		{
-			alert("Kode kemanan tidak cocok");
-			document.getElementById("kode").focus()
-			return false
-		}
-		
-		else
-		{
-			return true
-		}
-	}
-	</script>
- 
-    <div class="contact-form">
-    <br>
-    <br>
-    <br>
-				  	<h5>Kirim Komentar</h5>
-					    <form method="post" action="?page=kontak" onsubmit="return cek()">
-					    	<div>
-						    	<span><label>Nama lengkap</label></span>
-						    	<span><input name="nama" id="nama" type="text" class="textbox"></span>
-						    </div>
-						    <div>
-						    	<span><label>E-Mail</label></span>
-						    	<span><input name="email" id="email" type="text" class="textbox"></span>
-						    </div>
-						   	<div>
-						    	<span><label>Pesan</label></span>
-						    	<span><textarea name="pesan" id="pesan"></textarea></span>
-						    </div>
-                            <div><br /><br />
-    <?php
-	include "captcha.php";
-	?>
-    <br />
-    Masukkan kode keamanan di atas <input type="text" name="kode" id="kode" /><br />
-    </div>
-						  
-						 <input type="submit" value="Submit" name="button" class='button-contact'>
-					    </form>
-				  </div>
-<?php
-}
+$qf2=mysqli_query($con,"select * from kontak $filter");
+$rph=10;
+$jurec=mysqli_num_rows($qf2);
+$jmlhal=ceil($jurec/$rph);
+
+if(!isset($_GET['nohal']))
+	$nohal=0;
 else
+	$nohal=$_GET['nohal']-1;
+	
+
+$batas=$nohal*$rph;
+
+$qf=mysqli_query($con,"select * from kontak order by id_kontak desc limit $batas,$rph");
+
+$nmr=$batas;
+while($df=mysqli_fetch_array($qf))
 {
-	$tgl=date("Y-m-d");
-	mysqli_query($con,"insert into kontak (nama_kontak,email_kontak,pesan_kontak,tgl_kontak)
-										   values 
-										   ('$_POST[nama]','$_POST[email]','$_POST[pesan]','$tgl')");
-	echo "<meta http-equiv=refresh content='0;url=?page=daftarkontak'>";
+	$nmr++;
+	if(($nmr%2)==0)
+		$bc="style='background-color:00FFFF'";
+	else
+		$bc="style='background-color:white'";	
+		
+	$t=explode("-",$df['tgl_kontak']);	
+	?>
+    
+  <tr <?php echo "$bc";?>>
+    <td align="center" valign="top"><?php echo"$nmr";?></td>
+    <td align="center" valign="top"><?php echo"$t[2]-$t[1]-$t[0]";?></td>
+    <td align="left" valign="top"><?php echo"$df[nama_kontak]";?></td>
+     <td align="left" valign="top"><?php echo"$df[email_kontak]";?></td>
+      <td align="left" valign="top"><?php echo"$df[pesan_kontak]";?></td>
+ <td align="left" valign="top"><?php echo"$df[respon_admin]";?></td>      
+    <td align="center" valign="top" width="55">
+      <a href="?module=editkontak&aksi=edit&id=<?php echo"$df[id_kontak]";?>"><?php fedit();?></a>
+       <a href="?module=editkontak&aksi=hapus&id=<?php echo"$df[id_kontak]";?>" onclick="return konfirm('Yakin mau dihapus ?')"><?php fhapus();?></a>
+     </td>
+
+  </tr>
+<?php
 }
 ?>
+</table>
+<p>&nbsp;</p>
+<?php
+{
+	echo "<center>Halaman : ";
+for($i=0;$i<$jmlhal;$i++)
+{
+	$k=$i+1;
+	if($i==$nohal)
+		echo " [<b>$k</b>] ";
+	else
+		echo " [<a href='?module=kontak&txtcari=$txtcari&nohal=$k'>$k</a>] ";
+}
+echo "</center>";
+}
+?>
+
