@@ -17,8 +17,8 @@
 				<div class="col_1_of_4 span_1_of_4 footer-lastgrid">
 					<h3>FOLLOW KAMI</h3>
 					<ul>
-						<li><a href="#">FACEBOOK</a></li>
-						<li><a href="#">INSTAGRAM</a></li>
+						<li><a href="https://www.facebook.com/ablevariasi.ablevariasi">FACEBOOK</a></li>
+						<li><a href="https://www.instagram.com/alladventureyk/?hl=en">INSTAGRAM</a></li>
 					</ul>
 			    </div>
 				<div class="clear"></div> 
