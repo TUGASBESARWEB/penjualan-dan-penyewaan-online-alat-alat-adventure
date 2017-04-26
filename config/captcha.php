@@ -1,0 +1,11 @@
+<?php
+$acak=array("A","B","L","K","Y","U","P","E","Z","h","g",4,6,9,2,1,8,"n");
+$hasil=array();
+while(count($hasil)<5)
+{
+$rand=rand(0,(count($acak)-1));
+$hasil[]=$acak[$rand];
+}
+$gab=implode("",$hasil);
+$_SESSION[sescapt]=$gab;
+?>
